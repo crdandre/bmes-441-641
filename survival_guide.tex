@@ -1,0 +1,40 @@
+\documentclass{article}
+\usepackage[a4paper, total={6in, 10.5in}]{geometry}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{hyperref}
+\pagenumbering{gobble}
+\title{BMES 441/641 Survival Guide v0.1}
+\author{Christian D'Andrea }
+\date{September 2024}
+\begin{document}
+\maketitle
+\section{Introduction}
+Reports show me that you know how to think logically about the experiment performed. That you can envision an experiment and think of relevant, specific, and testable hypotheses. That you can provide background about why this work is relevant or useful, what is to be learned, and what the objective is to complete this learning. That you can describe your methods such that the process could be reproduced. That your results transparently describe the outcomes without interpretation (yet). That the discussion provides an evidence-backed interpretation of your results with respect to your hypotheses. If you can prove to me that you succeed at this within the required formatting guidelines, you will likely achieve a grade with which you'll be content!
+
+\section{Presentation and Report Submission Tips}
+\begin{enumerate}
+\item Submit presentations and reports as a PDF directly to BBLearn. Do NOT submit the PDF in a zip file.
+\item Code will be submitted either in a zip file or to GitHub (TBD)
+\end{enumerate}
+
+\section{Statistics}
+In most cases you can use one of four choices, with some considerations in your specific case.
+
+\begin{enumerate}
+\item If there are two groups and both datasets are normally distributed $\Rightarrow$ independent or paired samples t-test
+\item If there are two paired groups and both corresponding datasets are NOT normally distributed $\Rightarrow$ Mann-Whitney U-test for independent groups or Wilcoxon signed-rank test for paired data 
+\item If there are n$>$2 groups and both datasets are normally distributed $\Rightarrow$ n-way ANOVA
+\item If there are n$>$2 groups and both corresponding datasets are NOT normally distributed $\Rightarrow$ Kruskal-Wallis
+\end{enumerate}
+
+\section {Useful Tools}
+This class involves a solid amount of coding work, no doubt. The important part is not that you know how to change a plot's line width in MATLAB, it's that you, with your brain, can architect an flow which allows you to perform a valid analysis of the data and intuitively visualize it, and communicate this effectively to me/your readers, in a way that proves you have designed and understand your approach. This approach still requires knowledge of how to write and generate well-structured code, but it's wasted time to get stuck on small details which don't enable learning biomechanics. So, here are some helpful tools to this end, which I use in my research:
+
+\begin{enumerate}
+\item \href{https://miro.com/}{Miro}, a flowchart/diagramming tool
+\item \href{https://www.cursor.com/}{Cursor}, an AI-enabled code editor. You can install a MATLAB extension for editing the code in Cursor, and can run this code through the usual MATLAB IDE.
+\item \href{https://www.github.com}{GitHub}, a Software Versioning and Collaboration tool
+\item \href{https://www.perplexity.ai/}{Perplexity}, a new search engine - great for gathering initial evidence, leading more quickly to scholarly sources
+\end{enumerate}
+
+\end{document}
