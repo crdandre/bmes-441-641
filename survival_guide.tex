@@ -1,8 +1,24 @@
 \documentclass{article}
-\usepackage[a4paper, total={6in, 11.5in}]{geometry}
+\usepackage[a4paper, total={6in, 11.5in}, margin=1in]{geometry}
 \usepackage{graphicx} % Required for inserting images
+\usepackage{xcolor}
 \usepackage{hyperref}
-\pagenumbering{gobble}
+\usepackage{soul} % For underlining
+
+% Configure hyperref for colored and underlined links
+\hypersetup{
+    colorlinks=true,
+    linkcolor=cyan,
+    filecolor=magenta,
+    urlcolor=cyan,
+    pdftitle={BMES 441/641 Survival Guide},
+    pdfpagemode=FullScreen,
+}
+
+% Define a command for underlined links
+\newcommand{\ulink}[2]{\href{#1}{\ul{#2}}}
+
+% \pagenumbering{gobble}
 \title{BMES 441/641 Survival Guide v0.1}
 \author{Christian D'Andrea }
 \date{September 2024}
@@ -19,14 +35,131 @@ Reports show me that you know how to think logically about the experiment perfor
 \end{enumerate}
 
 \section{Statistics}
-In most cases you can use one of four choices, with some considerations in your specific case.
+Here is a choose-your-own-adventure guide to performing statistics on your data. This should cover anything you run into during these courses. I'm not a statistician, and am learning this art along with you, so if you disagree with any recommendation below, please email me and we can figure it out.
 
 \begin{enumerate}
-\item If there are two groups and both datasets are normally distributed $\Rightarrow$ independent or paired samples t-test
-\item If there are two paired groups and both corresponding datasets are NOT normally distributed $\Rightarrow$ Mann-Whitney U-test for independent groups or Wilcoxon signed-rank test for paired data 
-\item If there are n$>$2 groups and both datasets are normally distributed $\Rightarrow$ n-way ANOVA
-\item If there are n$>$2 groups and both corresponding datasets are NOT normally distributed $\Rightarrow$ Kruskal-Wallis
+    \item Pre-tests
+    \begin{enumerate}
+    \item Normality Test
+    \begin{enumerate}
+    \item For small samples ($n < 50$): Shapiro-Wilk test
+    \item For large samples ($n \geq 50$): Kolmogorov-Smirnov test
+    \item Visual inspection (Q-Q plots, histograms)
+    \end{enumerate}
+    \item Homogeneity of Variance (for parametric tests)
+    \begin{enumerate}
+    \item Levene's test
+    \item Bartlett's test (if data is normal)
+    \end{enumerate}
+    \item Outlier Detection
+    \begin{enumerate}
+    \item Visual methods (box plots, scatter plots)
+    \item Statistical methods (Z-scores, Interquartile Range)
+    \end{enumerate}
+    \end{enumerate}
+    \item Test Selection Guide
+    \begin{enumerate}
+        \item Two Groups
+        \begin{enumerate}
+            \item Small Sample Size ($n < 30$ per group)
+            \begin{enumerate}
+                \item Normal Distribution \& Equal Variances
+                \begin{itemize}
+                    \item Independent: Independent samples t-test
+                    \item Paired: Paired samples t-test
+                \end{itemize}
+                \item Non-Normal Distribution OR Unequal Variances
+                \begin{itemize}
+                    \item Independent: Mann-Whitney U test
+                    \item Paired: Wilcoxon signed-rank test
+                \end{itemize}
+            \end{enumerate}
+            \item Large Sample Size ($n \geq 30$ per group)
+            \begin{enumerate}
+                \item Normal Distribution
+                \begin{itemize}
+                    \item Independent: Independent samples t-test
+                    \item Paired: Paired samples t-test
+                \end{itemize}
+                \item Non-Normal Distribution
+                \begin{itemize}
+                    \item Independent: Mann-Whitney U test (or t-test if $n > 50$)
+                    \item Paired: Wilcoxon signed-rank test (or paired t-test if $n > 50$)
+                \end{itemize}
+            \end{enumerate}
+        \end{enumerate}
+        \item More than Two Groups
+        \begin{enumerate}
+            \item Small Sample Size ($n < 30$ per group)
+            \begin{enumerate}
+                \item Normal Distribution \& Equal Variances
+                \begin{itemize}
+                    \item Independent: One-way ANOVA
+                    \item Paired/Repeated Measures: Repeated measures ANOVA
+                \end{itemize}
+                \item Non-Normal Distribution OR Unequal Variances
+                \begin{itemize}
+                    \item Independent: Kruskal-Wallis H test
+                    \item Paired/Repeated Measures: Friedman test
+                \end{itemize}
+            \end{enumerate}
+            \item Large Sample Size ($n \geq 30$ per group)
+            \begin{enumerate}
+                \item Normal AND Non-Normal Distributions
+                \begin{itemize}
+                    \item Independent: One-way ANOVA
+                    \item Paired/Repeated Measures: Repeated measures ANOVA
+                \end{itemize}
+            \end{enumerate}
+        \end{enumerate}
+    \end{enumerate}
+
+    \item Post-hoc Tests
+    \begin{enumerate}
+        \item For ANOVA (parametric)
+        \begin{itemize}
+            \item Tukey's HSD (Honestly Significant Difference): For all pairwise comparisons when sample sizes are equal and variances are homogeneous
+            \begin{itemize}
+                \item Default in MATLAB's \ulink{https://www.mathworks.com/help/stats/multiple-comparisons.html\#bum7ue_-1}{multcompare()} function
+                \item Balances Type I error mitigation and statistical power
+                \item Suitable for most situations with equal sample sizes
+            \end{itemize}
+            \item Bonferroni: Conservative approach for mitigating Type I error, suitable for a small number of comparisons, or else it may get \textit{too} conservative. Consider using this when the real-life consequences of a Type I error are high.
+            \item Dunnett's test: When comparing multiple groups to a single control group
+            \item This is not an exhaustive list, but likely covers most cases. Feel free to use another if justified.
+        \end{itemize}
+        \item For Kruskal-Wallis H test (non-parametric)
+        \begin{itemize}
+            \item Dunn's test: For pairwise comparisons after a significant Kruskal-Wallis result
+            \item Mann-Whitney U tests with Bonferroni correction: Alternative to Dunn's test, more conservative
+        \end{itemize}
+        \item For Friedman test (non-parametric repeated measures)
+        \begin{itemize}
+            \item Nemenyi test: For all pairwise comparisons
+            \item Wilcoxon signed-rank tests with Bonferroni correction: Alternative to Nemenyi test, more conservative
+        \end{itemize}
+    \end{enumerate}
+    
+    \item Other Cases
+    \begin{enumerate}
+        \item Categorical Data
+        \begin{itemize}
+            \item Two categories: Chi-square test of independence
+            \item More than two categories: Chi-square test or Fisher's exact test (for small expected frequencies)
+        \end{itemize}
+        \item Correlation
+        \begin{itemize}
+            \item Normal Distribution: Pearson correlation
+            \item Non-Normal Distribution: Spearman rank correlation
+        \end{itemize}
+        \item Regression
+        \begin{itemize}
+            \item Linear relationship \& Normal residuals: Linear regression
+            \item Non-linear relationship or Non-normal residuals: Non-linear regression or Generalized Linear Models / Multiple-linear regression
+        \end{itemize}
+    \end{enumerate}
 \end{enumerate}
+
 
 \section {Useful Tools}
 This class involves a solid amount of coding work, no doubt. The important part is not that you know how to change a plot's line width in MATLAB, it's that you, with your brain, can architect an flow which allows you to perform a valid analysis of the data and intuitively visualize it, and communicate this effectively to me/your readers, in a way that proves you have designed and understand your approach. This approach still requires knowledge of how to write and generate well-structured code, but it's wasted time to get stuck on small details which don't enable learning biomechanics. So, here are some helpful tools to this end, which I use in my research:
