@@ -1,1 +1,8 @@
 .env
+.env
+
+# Ignore survival_guide files that aren't PDF or TEX
+survival_guide.*
+!survival_guide.pdf
+!survival_guide.tex
+
